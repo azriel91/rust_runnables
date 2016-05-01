@@ -1,5 +1,7 @@
 # Rust Runnables
 
+[![Build Status](https://travis-ci.org/azriel91/rust_runnables.svg?branch=master)](https://travis-ci.org/azriel91/rust_runnables) [![Crates.io](https://img.shields.io/crates/v/rust_runnables.svg)](https://crates.io/crates/rust_runnables)
+
 Rust traits that mimic the `Runnable` and `Callable<T>` interfaces in Java.
 
 ## Usage
