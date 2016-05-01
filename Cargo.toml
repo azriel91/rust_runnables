@@ -1,0 +1,16 @@
+[package]
+name = "rust_runnables"
+version = "0.1.0"
+authors = ["Azriel Hoh <azriel91@gmail.com>"]
+description = "Rust traits that mimic the Runnable and Callable<T> interfaces in Java."
+homepage = "https://github.com/azriel91/rust_runnables"
+repository = "https://github.com/azriel91/rust_runnables"
+readme = "README.md"
+keywords = ["runnable", "callable"]
+license = "Apache-2.0"
+
+[lib]
+path = "./src/lib.rs"
+test = true
+doctest = true
+doc = true
