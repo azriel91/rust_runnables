@@ -1,6 +1,6 @@
 [package]
 name = "rust_runnables"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Azriel Hoh <azriel91@gmail.com>"]
 description = "Rust traits that mimic the Runnable and Callable<T> interfaces in Java."
 homepage = "https://github.com/azriel91/rust_runnables"

@@ -10,7 +10,7 @@
 /// struct MyRunnable;
 ///
 /// impl Runnable for MyRunnable {
-///     fn run(&self) {}
+///     fn run(&mut self) {}
 /// }
 /// ```
 ///
@@ -21,20 +21,39 @@
 /// #
 /// # struct MyRunnable;
 /// # impl Runnable for MyRunnable {
-/// #     fn run(&self) {}
+/// #     fn run(&mut self) {}
 /// # }
 /// #
+/// fn call_a_function(the_function: &mut FnMut()) {
+///     the_function();
+/// }
+///
+/// let mut my_runnable = MyRunnable;
+/// call_a_function( &mut || my_runnable.run());
+/// ```
+///
+/// Or for a function that takes an immutable `Fn()`:
+///
+/// ```
+/// # use rust_runnables::Runnable;
+/// #
+/// # struct MyRunnable;
+/// # impl Runnable for MyRunnable {
+/// #     fn run(&mut self) {}
+/// # }
+/// #
+/// use std::cell::RefCell;
+///
 /// fn call_a_function(the_function: &Fn()) {
 ///     the_function();
 /// }
 ///
-/// let my_runnable = MyRunnable;
-///
-/// call_a_function(&|| my_runnable.run());
+/// let celled_runnable = RefCell::new(MyRunnable);
+/// call_a_function( &|| celled_runnable.borrow_mut().run());
 /// ```
 ///
 pub trait Runnable {
-    fn run(&self);
+    fn run(&mut self);
 }
 
 /// A Callable is a single function trait that returns a value
@@ -47,7 +66,7 @@ pub trait Runnable {
 /// struct MyCallable;
 ///
 /// impl Callable<i32> for MyCallable {
-///     fn call(&self) -> i32 {
+///     fn call(&mut self) -> i32 {
 ///         1337
 ///     }
 /// }
@@ -60,22 +79,43 @@ pub trait Runnable {
 /// #
 /// # struct MyCallable;
 /// # impl Callable<i32> for MyCallable {
-/// #     fn call(&self) -> i32 {
+/// #     fn call(&mut self) -> i32 {
 /// #         1337
 /// #     }
 /// # }
 /// #
+/// fn call_a_function(the_function: &mut FnMut() -> i32) {
+///     let the_value = the_function();
+/// }
+///
+/// let mut my_callable = MyCallable;
+/// call_a_function( &mut || -> i32 { my_callable.call() } );
+/// ```
+///
+/// Or for a function that takes an immutable `Fn()`:
+///
+/// ```
+/// # use rust_runnables::Callable;
+/// #
+/// # struct MyCallable;
+/// # impl Callable<i32> for MyCallable {
+/// #     fn call(&mut self) -> i32 {
+/// #         1337
+/// #     }
+/// # }
+/// #
+/// use std::cell::RefCell;
+///
 /// fn call_a_function(the_function: &Fn() -> i32) {
 ///     let the_value = the_function();
 /// }
 ///
-/// let my_callable = MyCallable;
-///
-/// call_a_function( &|| -> i32 { my_callable.call() } );
+/// let celled_callable = RefCell::new(MyCallable);
+/// call_a_function( &|| -> i32 { celled_callable.borrow_mut().call() } );
 /// ```
 ///
 pub trait Callable<T> {
-    fn call(&self) -> T;
+    fn call(&mut self) -> T;
 }
 
 #[cfg(test)]
@@ -85,12 +125,12 @@ mod tests {
 
     struct MyRunnable;
     impl Runnable for MyRunnable {
-        fn run(&self) {}
+        fn run(&mut self) {}
     }
 
     struct MyCallable;
     impl Callable<i32> for MyCallable {
-        fn call(&self) -> i32 {
+        fn call(&mut self) -> i32 {
             1337
         }
     }
